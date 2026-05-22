@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareSync AI - Healthcare Appointment System</title>
+    <!-- Tailwind CSS (Performance & UI/UX) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js (Dashboard) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts: Prompt for Thai Readability (Accessibility) -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Prompt', sans-serif; background-color: #f8fafc; }
+        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <!-- Navbar -->
+    <nav class="bg-teal-600 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex-shrink-0 flex items-center gap-2 font-bold text-xl tracking-wide">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                    CareSync <span class="font-light text-teal-200">AI</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span class="text-sm hidden sm:block">ผู้ดูแลระบบ: Admin_01</span>
+                    <img class="h-8 w-8 rounded-full border-2 border-teal-300" src="https://ui-avatars.com/api/?name=Admin&background=0D8B93&color=fff" alt="Admin Avatar">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Section 1: Dashboard (KPIs & Chart) -->
+        <section id="dashboard" class="mb-10 fade-in">
+            <h2 class="text-2xl font-semibold mb-6 flex items-center gap-2 text-teal-800">
+                📊 ภาพรวมระบบ (Dashboard)
+            </h2>
+            
+            <!-- KPI Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8" id="kpi-container">
+                <!-- Data will be injected via JS -->
+            </div>
+
+            <!-- Chart & AI Triage (Bonus) -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 glass-card p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <h3 class="text-lg font-medium mb-4 text-slate-700">สถิติการนัดหมายแบ่งตามแผนก</h3>
+                    <canvas id="deptChart" height="100"></canvas>
+                </div>
+                
+                <!-- 🌟 Bonus: AI Feature (AI Symptom Triage) -->
+                <div class="glass-card p-6 rounded-2xl shadow-sm border border-teal-100 bg-gradient-to-b from-white to-teal-50">
+                    <h3 class="text-lg font-medium mb-2 text-teal-700 flex items-center gap-2">
+                        ✨ AI Triage (ประเมินอาการเบื้องต้น)
+                    </h3>
+                    <p class="text-sm text-slate-500 mb-4">พิมพ์อาการผู้ป่วยเพื่อให้ AI ช่วยคัดกรองแผนกและความเร่งด่วน</p>
+                    <textarea id="ai-symptom" rows="3" class="w-full rounded-xl border-slate-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm p-3" placeholder="เช่น ปวดหัวอย่างรุนแรง, เจ็บหน้าอกร้าวไปที่แขน..."></textarea>
+                    <button onclick="analyzeSymptom()" class="mt-3 w-full bg-teal-600 hover:bg-teal-700 text-white font-medium py-2 px-4 rounded-xl transition-colors">
+                        วิเคราะห์ด้วย AI
+                    </button>
+                    <div id="ai-result" class="mt-4 hidden p-4 bg-white rounded-xl border border-teal-100 shadow-inner text-sm">
+                        <!-- AI Result injected here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: List + Filter/Search -->
+        <section id="list-view" class="mb-10 fade-in" style="animation-delay: 0.1s;">
+            <div class="glass-card rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="p-6 border-b border-slate-100 bg-white flex flex-col md:flex-row justify-between items-center gap-4">
+                    <h2 class="text-xl font-semibold text-teal-800">📋 รายการนัดพบแพทย์</h2>
+                    
+                    <!-- Filters & Search -->
+                    <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                        <input type="text" id="searchInput" placeholder="ค้นหาชื่อผู้ป่วย, แพทย์..." 
+                            class="rounded-xl border-slate-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm p-2 w-full sm:w-64"
+                            onkeyup="filterTable()">
+                        <select id="statusFilter" class="rounded-xl border-slate-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm p-2" onchange="filterTable()">
+                            <option value="all">สถานะทั้งหมด</option>
+                            <option value="รอดำเนินการ">รอดำเนินการ (Pending)</option>
+                            <option value="เสร็จสิ้น">เสร็จสิ้น (Completed)</option>
+                            <option value="ยกเลิก">ยกเลิก (Cancelled)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Data Table -->
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-slate-200">
+                        <thead class="bg-slate-50 text-slate-500 text-sm">
+                            <tr>
+                                <th class="px-6 py-3 text-left font-medium">รหัส / เวลา</th>
+                                <th class="px-6 py-3 text-left font-medium">ผู้ป่วย</th>
+                                <th class="px-6 py-3 text-left font-medium">แพทย์ / แผนก</th>
+                                <th class="px-6 py-3 text-left font-medium">สถานะ</th>
+                                <th class="px-6 py-3 text-center font-medium">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body" class="bg-white divide-y divide-slate-100 text-sm">
+                            <!-- Rows injected via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Section 3: Detail Page (Modal) -->
+    <div id="detail-modal" class="fixed inset-0 bg-slate-900 bg-opacity-50 hidden z-50 flex items-center justify-center fade-in backdrop-blur-sm" aria-modal="true" role="dialog">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+            <div class="bg-teal-600 px-6 py-4 flex justify-between items-center text-white">
+                <h3 class="font-semibold text-lg">📄 รายละเอียดการนัดหมาย</h3>
+                <button onclick="closeModal()" class="text-teal-200 hover:text-white transition-colors" aria-label="Close modal">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="p-6" id="modal-content">
+                <!-- Content injected via JS -->
+            </div>
+            <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-3">
+                <button onclick="closeModal()" class="px-4 py-2 bg-white border border-slate-200 rounded-xl text-slate-600 hover:bg-slate-100 transition-colors text-sm font-medium">ปิด</button>
+                <button class="px-4 py-2 bg-teal-600 text-white rounded-xl hover:bg-teal-700 transition-colors text-sm font-medium shadow-sm">พิมพ์ประวัติ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Logic -->
+    <script>
+        // ==========================================
+        // 1. JSON Data (Data & State Handling)
+        // ==========================================
+        const appData = {
+            kpis: {
+                totalAppointments: 142,
+                completedToday: 45,
+                aiTriageUsed: 89
+            },
+            appointments: [
+                { id: "AP-1001", time: "09:00", patient: "สมหญิง รักดี", age: 45, doctor: "นพ. กิตติพัฒน์", dept: "อายุรกรรมหัวใจ", status: "รอดำเนินการ", symptoms: "เจ็บหน้าอก แน่นหน้าอก", priority: "High" },
+                { id: "AP-1002", time: "09:30", patient: "วีระ สุขใจ", age: 28, doctor: "พญ. นภัสสร", dept: "ผิวหนัง", status: "เสร็จสิ้น", symptoms: "ผื่นแดงตามแขน", priority: "Low" },
+                { id: "AP-1003", time: "10:15", patient: "ด.ช. ต้นกล้า มีสุข", age: 8, doctor: "นพ. ชัยยุทธ", dept: "กุมารเวช", status: "รอดำเนินการ", symptoms: "ไข้สูง 39 องศา, ไอ", priority: "Medium" },
+                { id: "AP-1004", time: "11:00", patient: "สมศักดิ์ มั่งมี", age: 62, doctor: "พญ. อรทัย", dept: "กระดูกและข้อ", status: "ยกเลิก", symptoms: "ปวดเข่าเรื้อรัง", priority: "Low" },
+                { id: "AP-1005", time: "13:30", patient: "มาลี ศรีเมือง", age: 35, doctor: "นพ. กิตติพัฒน์", dept: "อายุรกรรมทั่วไป", status: "รอดำเนินการ", symptoms: "ปวดหัวไมเกรน", priority: "Medium" }
+            ],
+            departments: ["อายุรกรรมหัวใจ", "ผิวหนัง", "กุมารเวช", "กระดูกและข้อ", "อายุรกรรมทั่วไป"],
+            deptStats: [25, 15, 30, 20, 52] // For Chart
+        };
+
+        // ==========================================
+        // 2. Dashboard / Overview Rendering
+        // ==========================================
+        function renderDashboard() {
+            // Render KPIs
+            const kpiContainer = document.getElementById('kpi-container');
+            const kpiCards = [
+                { title: "นัดหมายทั้งหมด", val: appData.kpis.totalAppointments, icon: "📅", color: "text-blue-600", bg: "bg-blue-50" },
+                { title: "ตรวจเสร็จสิ้นวันนี้", val: appData.kpis.completedToday, icon: "✅", color: "text-emerald-600", bg: "bg-emerald-50" },
+                { title: "คัดกรองด้วย AI", val: appData.kpis.aiTriageUsed, icon: "🤖", color: "text-purple-600", bg: "bg-purple-50" }
+            ];
+
+            kpiContainer.innerHTML = kpiCards.map(kpi => `
+                <div class="glass-card p-6 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4 hover:shadow-md transition-shadow">
+                    <div class="w-14 h-14 rounded-full ${kpi.bg} flex items-center justify-center text-2xl">${kpi.icon}</div>
+                    <div>
+                        <p class="text-sm text-slate-500 font-medium">${kpi.title}</p>
+                        <p class="text-3xl font-bold ${kpi.color}">${kpi.val}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            // Render Chart
+            const ctx = document.getElementById('deptChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: appData.departments,
+                    datasets: [{
+                        label: 'จำนวนนัดหมาย',
+                        data: appData.deptStats,
+                        backgroundColor: 'rgba(13, 145, 147, 0.7)',
+                        borderColor: 'rgba(13, 145, 147, 1)',
+                        borderWidth: 1,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, grid: { borderDash: [2, 4] } } }
+                }
+            });
+        }
+
+        // ==========================================
+        // 3. List + Filter/Search
+        // ==========================================
+        function getStatusBadge(status) {
+            const styles = {
+                "รอดำเนินการ": "bg-amber-100 text-amber-800 border-amber-200",
+                "เสร็จสิ้น": "bg-emerald-100 text-emerald-800 border-emerald-200",
+                "ยกเลิก": "bg-red-100 text-red-800 border-red-200"
+            };
+            return `<span class="px-3 py-1 rounded-full text-xs font-medium border ${styles[status]}">${status}</span>`;
+        }
+
+        function renderTable(data) {
+            const tbody = document.getElementById('table-body');
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-8 text-center text-slate-500">ไม่พบข้อมูลการนัดหมาย</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = data.map(app => `
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="px-6 py-4">
+                        <div class="font-medium text-teal-700">${app.id}</div>
+                        <div class="text-xs text-slate-500">${app.time} น.</div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="font-medium">${app.patient}</div>
+                        <div class="text-xs text-slate-500">อายุ ${app.age} ปี</div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div>${app.doctor}</div>
+                        <div class="text-xs text-slate-500">${app.dept}</div>
+                    </td>
+                    <td class="px-6 py-4">${getStatusBadge(app.status)}</td>
+                    <td class="px-6 py-4 text-center">
+                        <button onclick="showDetail('${app.id}')" class="text-teal-600 hover:text-teal-900 bg-teal-50 hover:bg-teal-100 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors" aria-label="View details">ดูประวัติ</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const statusTerm = document.getElementById('statusFilter').value;
+
+            const filteredData = appData.appointments.filter(app => {
+                const matchSearch = app.patient.toLowerCase().includes(searchTerm) || 
+                                    app.doctor.toLowerCase().includes(searchTerm) || 
+                                    app.id.toLowerCase().includes(searchTerm);
+                const matchStatus = statusTerm === "all" || app.status === statusTerm;
+                return matchSearch && matchStatus;
+            });
+            renderTable(filteredData);
+        }
+
+        // ==========================================
+        // 4. Detail Page (Modal functionality)
+        // ==========================================
+        function showDetail(id) {
+            const record = appData.appointments.find(a => a.id === id);
+            const content = document.getElementById('modal-content');
+            
+            const priorityColor = record.priority === 'High' ? 'text-red-600 bg-red-50 border-red-200' : 
+                                  record.priority === 'Medium' ? 'text-amber-600 bg-amber-50 border-amber-200' : 
+                                  'text-emerald-600 bg-emerald-50 border-emerald-200';
+
+            content.innerHTML = `
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <p class="text-xs text-slate-500">รหัสการนัดหมาย / เวลา</p>
+                        <p class="font-medium text-slate-800">${record.id} • ${record.time} น.</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500">สถานะ</p>
+                        ${getStatusBadge(record.status)}
+                    </div>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 mb-4">
+                    <h4 class="text-sm font-semibold text-slate-700 mb-3 border-b border-slate-200 pb-2">ข้อมูลผู้ป่วย</h4>
+                    <p class="text-sm mb-1"><span class="text-slate-500 w-24 inline-block">ชื่อ-สกุล:</span> <span class="font-medium">${record.patient}</span> (อายุ ${record.age} ปี)</p>
+                    <p class="text-sm mb-1"><span class="text-slate-500 w-24 inline-block">อาการเบื้องต้น:</span> ${record.symptoms}</p>
+                    <p class="text-sm mt-2"><span class="px-2 py-1 rounded text-xs border ${priorityColor}">ความเร่งด่วน: ${record.priority}</span></p>
+                </div>
+                <div class="bg-teal-50 p-4 rounded-xl border border-teal-100">
+                    <h4 class="text-sm font-semibold text-teal-800 mb-2">แพทย์ผู้ดูแล</h4>
+                    <p class="text-sm"><span class="font-medium">${record.doctor}</span> • แผนก${record.dept}</p>
+                </div>
+            `;
+            document.getElementById('detail-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('detail-modal').classList.add('hidden');
+        }
+
+        // ==========================================
+        // 5. 🌟 Bonus: AI Feature (Mock AI Triage)
+        // ==========================================
+        function analyzeSymptom() {
+            const input = document.getElementById('ai-symptom').value.trim();
+            const resultBox = document.getElementById('ai-result');
+            
+            if(!input) {
+                resultBox.innerHTML = `<span class="text-amber-600">⚠️ กรุณาระบุอาการก่อนให้ AI วิเคราะห์</span>`;
+                resultBox.classList.remove('hidden');
+                return;
+            }
+
+            // Mock AI Logic based on keywords
+            let dept = "อายุรกรรมทั่วไป";
+            let priority = "Normal";
+            let color = "text-emerald-600";
+
+            if (input.includes("เจ็บหน้าอก") || input.includes("หัวใจ")) {
+                dept = "อายุรกรรมหัวใจ"; priority = "🔴 ฉุกเฉิน (High Priority)"; color = "text-red-600";
+            } else if (input.includes("กระดูก") || input.includes("หัก") || input.includes("ปวดเข่า")) {
+                dept = "กระดูกและข้อ"; priority = "🟡 ปานกลาง (Medium Priority)"; color = "text-amber-600";
+            } else if (input.includes("เด็ก") || input.includes("ลูก")) {
+                dept = "กุมารเวช";
+            } else if (input.includes("ผื่น") || input.includes("คัน")) {
+                dept = "ผิวหนัง";
+            }
+
+            resultBox.innerHTML = `
+                <p class="font-medium text-slate-700 mb-1">ผลการวิเคราะห์จาก AI:</p>
+                <ul class="list-disc list-inside text-slate-600 space-y-1">
+                    <li>แผนกที่แนะนำ: <strong class="text-teal-700">${dept}</strong></li>
+                    <li>ระดับความเร่งด่วน: <strong class="${color}">${priority}</strong></li>
+                </ul>
+                <div class="mt-3 flex gap-2">
+                     <button class="text-xs bg-teal-100 hover:bg-teal-200 text-teal-800 px-3 py-1.5 rounded transition-colors">สร้างใบนัดหมายแผนกนี้</button>
+                </div>
+            `;
+            resultBox.classList.remove('hidden');
+            resultBox.classList.add('fade-in');
+        }
+
+        // Initialize App
+        window.onload = () => {
+            renderDashboard();
+            renderTable(appData.appointments);
+        };
+    </script>
+</body>
+</html>
