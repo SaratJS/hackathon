@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="flex justify-center items-center h-screen  bg-[#D7C9B8]">
+    <div class="box w-[410px] h-[500px] backdrop-blur-[10] rounded-[10px] bg-[#F5F1EA] shadow-2xl flex flex-col justify-center items-center">
+        <div class="logo">
+            <img src="img/logo.png" alt="">
+        </div>
+        <div class="input w-full h-full flex flex-col p-4 gap-5">
+            <input type="text" class="bg-[#7D5A44] p-2 px-6 rounded-[50px] focus: border-none focus: outline-none" placeholder="Enter Your Citizen ID" style="color: white;">
+            <input type="number" class="bg-[#7D5A44] p-2 px-6 rounded-[50px] focus: outline-none" placeholder="Enter Your Laser ID" style="color: white;">
+            
+            <div class="wrapper-location flex justify-center items-center  bg-[#7D5A44] rounded-xl ">
+                <select name="" id="" class="flex justify-center items-center p-2  w-full text-center focus: border-none focus:outline-none text-[#F5F1EA] focus:text-[#4A342A] ">
+                    <option value="">--> เลือกจังหวัดก่อน <--</option>
+                    <option value="หนองคาย">หนองคาย</option>
+                    <option value="อุดร">อุดร</option>
+                    <option value="ขอนแก่น">ขอนแก่น</option>
+                    <option value="สารคาม">สารคาม</option>
+                </select>
+            </div>  
+
+            <div class="btn flex justify-center items-center">
+            <button class="w-[190px] h-[40px] bg-[#FFFFFF] rounded-[50px] hover:scale-[1.2] transition-all" onclick="alert('Singin!!!')">Sing Up</button>
+        </div>
+        </div>
+        
+    </div>
+    
+    
+</body>
+</html>
