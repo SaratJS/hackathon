@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>appDisplay</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style type="text/tailwindcss">
+        @layer components {
+            .nav-btn {
+                @apply flex-1 flex justify-center items-center h-[70px] bg-[#D7C9B8] text-[#9D8872] transition-all duration-300 ease-out cursor-pointer relative;
+            }
+            .nav-btn.active {
+                @apply bg-[#4D3A2F] text-white -translate-y-3 rounded-lg border-b-[6px] border-white shadow-lg z-10;
+            }
+            .nav-btn:not(:first-child):not(.active) {
+                @apply border-l border-[#CBBBA8];
+            }
+            .nav-btn:first-child { @apply rounded-l-md; }
+            .nav-btn:last-child { @apply rounded-r-md; }
+        }
+    </style>
+</head>
+<body class="bg-[#B2967D]">
+    
+    <div class="div bg-[#D7C9B8] min-h-screen flex flex-col pb-[90px] relative">
+        
+        <div class="search sticky top-0 z-20 p-4 bg-[#D7C9B8]">
+            <div class="input-wrapper flex justify-center items-center gap-2 bg-[#B2967D] p-2 px-4 rounded-[60px]">
+                <input type="text" placeholder="Enter Info" class="w-full border-none outline-none bg-[#B2967D] p-1 px-5 text-white placeholder-white">
+                <div class="box-incon text-white whitespace-nowrap">ค้นหา</div>
+            </div>
+        </div>
+
+        <div class="display-card grid grid-cols-1 p-4 pt-0 gap-3">
+            
+        </div>
+    </div>
+
+    <nav class="fixed bottom-0 left-0 w-full flex items-end bg-[#F6F2EB] pt-4 px-2 pb-0 z-50">
+        
+        <button class="nav-btn active">
+            <svg class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M11.47 3.84a.75.75 0 011.06 0l8.99 9a.75.75 0 11-1.06 1.06l-1.46-1.46V20a2 2 0 01-2 2h-3a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-1a.75.75 0 00-.75.75v4.5a.75.75 0 01-.75.75H7a2 2 0 01-2-2v-7.56l-1.46 1.46a.75.75 0 11-1.06-1.06l8.99-9z"/>
+            </svg>
+        </button>
+
+        <button class="nav-btn">
+            <svg class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd" />
+            </svg>
+        </button>
+
+        <button class="nav-btn">
+            <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            </svg>
+        </button>
+
+        <button class="nav-btn">
+            <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 12H3m11 0l-4 4m4-4l-4-4m5-5a9 9 0 1 1-6.7 14.6" />
+            </svg>
+        </button>
+
+    </nav>
+
+    <script>
+        const load = () => {
+            let displayCard = document.querySelector('.display-card');
+            let loadCard = "";
+            
+            for (let i = 1; i <= 15; i++) {
+                // แอบเติม ml-2 ให้กล่อง info เพื่อให้มีระยะห่างจากรูปภาพนิดหน่อย
+                loadCard += `
+                <div class="div flex w-full rounded-md">
+                    <div class="box-img rounded-[5px] bg-[#B2967D] min-w-[115px] h-[85px]"></div>
+                    <div class="info flex-1 bg-[#F5F1EA] h-[85px] "></div>
+                </div>`;
+            }
+            
+            displayCard.innerHTML = loadCard;
+        }
+
+        load();
+
+        const buttons = document.querySelectorAll('.nav-btn');
+
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                buttons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
