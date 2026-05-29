@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Register</title>
+        <script
+            src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+        <link rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+        <style>
+        .material-symbols-outlined {
+            font-variation-settings:
+                'FILL' 0,
+                'wght' 400,
+                'GRAD' 0,
+                'opsz' 24
+        }
+    </style>
+    </head>
+
+    <body class="flex justify-center items-center h-screen  bg-[#D7C9B8] p-2 ">
+        <div
+            class="box w-[510px] h-[600px] md: h-[900px] md:w-[610px] backdrop-blur-[10] rounded-[10px] bg-[#F5F1EA] shadow-2xl flex flex-col justify-center items-center">
+            <div class="logo">
+                <img src="img/logo.png" alt>
+            </div>
+            <div
+                class="input w-full h-full flex flex-col p-4 gap-5 flex flex-col justify-center items-center">
+
+                <!-- input 1 Citizen ID -->
+                <div
+                    class="flex items-center bg-[#7D5A44] rounded-[50px] px-6 py-2 w-[350px]">
+
+                    <input type="text"
+                        class="bg-transparent text-white placeholder-gray-300 focus:outline-none w-full peer"
+                        placeholder="Enter Your Citizen ID">
+
+                    <!-- ย้าย text-white และ peer-focus มาไว้ที่ระดับ div -->
+                    <div
+                        class="iconBox ml-2 flex items-center text-white peer-focus:text-[#C72828] transition-colors">
+                        <!-- ลบ class สีออกจาก span ให้มันรับสีจาก div แทน -->
+                        <span class="material-symbols-outlined">
+                            account_circle
+                        </span>
+                    </div>
+
+                </div>
+                <!-- input 2 Laser ID -->
+                <div
+                    class="flex items-center bg-[#7D5A44] rounded-[50px] px-6 py-2 w-[350px]">
+
+                    <input type="text"
+                        class="bg-transparent text-white placeholder-gray-300 focus:outline-none w-full peer/laser"
+                        placeholder="Enter Your Laser ID">
+
+                    <div
+                        class="iconBox ml-2 flex items-center text-white peer-focus/laser:text-[#C72828] transition-colors">
+                        <span class="material-symbols-outlined ">
+                            key
+                        </span>
+                    </div>
+
+                </div>
+
+                <!-- input 3 Phone Number -->
+                <div
+                    class="flex items-center bg-[#7D5A44] rounded-[50px] px-6 py-2 w-[350px]">
+
+                    <input type="text"
+                        class="bg-transparent text-white placeholder-gray-300 focus:outline-none w-full peer/laser"
+                        placeholder="Enter Your Phone Number">
+
+                    <div
+                        class="iconBox ml-2 flex items-center text-white peer-focus/laser:text-[#C72828] transition-colors">
+                        <span class="material-symbols-outlined ">
+                            settings_phone
+                        </span>
+                    </div>
+
+                </div>
+
+                <!-- input 4 Gobal Location -->
+                <div
+                    class="flex items-center bg-[#7D5A44] rounded-[10px] px-6 py-2 w-[350px]">
+                
+                    
+                    <div>
+                        <textarea class=""></textarea>
+                    </div>
+                    
+
+                    <div
+                        class="iconBox ml-2 flex items-center text-white peer-focus/laser:text-[#C72828] transition-colors">
+                        <span class="material-symbols-outlined ">
+                            add_location_alt
+                        </span>
+                    </div>
+
+                </div>
+                <!-- 111 -->
+                <!-- สุด -->
+
+                <div
+                    class="wrapper-location flex justify-center items-center  bg-[#7D5A44] rounded-xl ">
+                    <select name id
+                        class="flex justify-center items-center p-2  w-full text-center focus: border-none focus:outline-none text-[#F5F1EA] focus:text-[#4A342A]">
+                        <option value> --> เลือกจังหวัดก่อน <-- </option>
+                        <option value="หนองคาย">หนองคาย</option>
+                        <option value="อุดร">อุดร</option>
+                        <option value="ขอนแก่น">ขอนแก่น</option>
+                        <option value="สารคาม">สารคาม</option>
+                    </select>
+                </div>
+
+                <div class="btn flex justify-center items-center">
+                    <button
+                        class="w-[190px] h-[40px] bg-[#FFFFFF] rounded-[50px] hover:scale-[1.2] transition-all"
+                        onclick="alert('Singin!!!')">Sing Up</button>
+                </div>
+            </div>
+
+        </div>
+
+    </body>
+
+</html>

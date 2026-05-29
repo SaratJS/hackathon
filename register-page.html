@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ฟอร์มลงทะเบียนและที่อยู่ (Responsive)</title>
+    
+    <!-- นำเข้า Google Fonts (Prompt) และ Material Symbols -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+
+    <!-- นำเข้า Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Prompt', 'sans-serif'],
+                    },
+                    colors: {
+                        // เพิ่มสีโทนอุ่นคล้ายๆ งานเดิมของคุณให้ดูพรีเมียมขึ้น
+                        brand: {
+                            50: '#fdf8f6',
+                            100: '#f2e8e5',
+                            500: '#8b5e34', // สีน้ำตาลหลัก
+                            600: '#754c29',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .material-symbols-rounded {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-brand-100 min-h-screen flex items-center justify-center p-4 md:p-8">
+
+    <!-- Card Container: ปรับขนาดตามหน้าจออัตโนมัติ -->
+    <div class="bg-white w-full max-w-3xl rounded-2xl shadow-xl overflow-hidden border border-brand-50/50">
+        
+        <!-- Header (เปลี่ยนเป็นสีน้ำตาล/ครีม ตามธีมดั้งเดิมของคุณ) -->
+        <div class="bg-brand-500 px-6 py-6 text-white flex items-center justify-between relative overflow-hidden">
+            <!-- ลายน้ำตกแต่งพื้นหลัง -->
+            <span class="material-symbols-rounded absolute -right-4 -bottom-4 text-9xl text-white/10 select-none">
+                local_shipping
+            </span>
+            
+            <div class="relative z-10 flex items-center gap-3">
+                <div class="bg-white/20 p-2 rounded-lg backdrop-blur-sm">
+                    <span class="material-symbols-rounded text-3xl">contact_mail</span>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-semibold tracking-wide">ข้อมูลที่อยู่ </h2>
+                    <p class="text-brand-50 text-sm mt-0.5 font-light">กรุณากรอกข้อมูลให้ครบถ้วน</p>
+                </div>
+            </div>  
+        </div>
+
+        <form class="p-6 md:p-8 space-y-6" onsubmit="event.preventDefault(); alert('ลงทะเบียนสำเร็จ!');">
+            
+            <!-- Section 1: ข้อมูลส่วนตัว -->
+            <div>
+                <h3 class="text-lg font-medium text-gray-800 border-b pb-2 mb-4 flex items-center gap-2">
+                    <span class="material-symbols-rounded text-brand-500 text-xl">person</span>
+                    ข้อมูลส่วนตัว
+                </h3>
+                
+                <!-- Grid: 1 คอลัมน์บนมือถือ, 2 คอลัมน์บนจอใหญ่ -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    
+                    <!-- Citizen ID -->
+                    <div class="space-y-1.5">
+                        <label class="block text-sm font-medium text-gray-600">รหัสบัตรประชาชน (Citizen ID)</label>
+                        <div class="group relative">
+                            <span class="material-symbols-rounded absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand-500 transition-colors">
+                                badge
+                            </span>
+                            <input type="text" placeholder="เลขบัตรประชาชน 13 หลัก" required maxlength="13"
+                                class="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 focus:bg-white transition-all">
+                        </div>
+                    </div>
+                    
+                        <!-- Laser ID -->
+                    <div class="space-y-1.5">
+                        <label class="block text-sm font-medium text-gray-600">รหัสหลังบัตรประชาชน (Laser ID)</label>
+                        <div class="group relative">
+                            <span class="material-symbols-rounded absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand-500 transition-colors">
+                                key
+                            </span>
+                            <input type="text" placeholder="เลขหลังบัตรประชาชน    " required maxlength="13"
+                                class="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 focus:bg-white transition-all">
+                        </div>
+                    </div>
+
+                    <!-- Phone Number -->
+                    <div class="space-y-1.5">
+                        <label class="block text-sm font-medium text-gray-600">เบอร์โทรศัพท์</label>
+                        <div class="group relative">
+                            <span class="material-symbols-rounded absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand-500 transition-colors">
+                                smartphone
+                            </span>
+                            <input type="tel" placeholder="เช่น 0891234567" required
+                                class="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 focus:bg-white transition-all">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: ที่อยู่ -->
+            <div class="pt-2">
+                <h3 class="text-lg font-medium text-gray-800 border-b pb-2 mb-4 flex items-center gap-2">
+                    <span class="material-symbols-rounded text-brand-500 text-xl">location_home</span>
+                    รายละเอียดที่อยู่
+                </h3>
+
+                <div class="space-y-5">
+                    
+                    <!-- Textarea สำหรับพิมพ์ที่อยู่แบบอิสระ -->
+                    <div class="space-y-1.5">
+                        <label class="block text-sm font-medium text-gray-600">ที่อยู่ (บ้านเลขที่, หมู่, ซอย, ถนน, อาคาร)</label>
+                        <div class="group relative">
+                            <!-- ไอคอนจัดให้อยู่ด้านบนซ้ายเสมอ -->
+                            <span class="material-symbols-rounded absolute left-4 top-3.5 text-gray-400 group-focus-within:text-brand-500 transition-colors">
+                                edit_location_alt
+                            </span>
+                            <textarea name="location" id="location" placeholder="กรอกรายละเอียดที่อยู่ของคุณที่นี่..." required
+                                class="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 focus:bg-white transition-all resize-y min-h-[100px]"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Grid: 3 คอลัมน์บนจอใหญ่ -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                        
+                        <!-- จังหวัด (Dropdown แบบที่คุณเคยทำ) -->
+                        <div class="space-y-1.5 md:col-span-1">
+                            <label class="block text-sm font-medium text-gray-600">จังหวัด</label>
+                            <div class="group relative">
+                                <span class="material-symbols-rounded absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand-500 transition-colors z-10 pointer-events-none">
+                                    map
+                                </span>
+                                <!-- ใช้ appearance-none เพื่อลบลูกศรเดิมของ Browser และปรับแต่งใหม่ -->
+                                <select required
+                                    class="w-full pl-12 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-800 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 focus:bg-white transition-all appearance-none cursor-pointer">
+                                    <option value="" disabled selected>-- เลือกจังหวัด --</option>
+                                    <option value="หนองคาย">หนองคาย</option>
+                                    <option value="อุดรธานี">อุดรธานี</option>
+                                    <option value="ขอนแก่น">ขอนแก่น</option>
+                                    <option value="มหาสารคาม">มหาสารคาม</option>
+                                    <option value="กรุงเทพมหานคร">กรุงเทพมหานคร</option>
+                                </select>
+                                <!-- Custom Arrow Icon -->
+                                <span class="material-symbols-rounded absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">
+                                    expand_more
+                                </span>
+                            </div>
+                        </div>
+
+                        
+
+                        
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="pt-6 mt-8 border-t border-gray-100 flex flex-col-reverse sm:flex-row items-center justify-end gap-3">
+                <button type="button" class="w-full sm:w-auto px-6 py-3 rounded-xl font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800 focus:outline-none transition-colors">
+                    ล้างข้อมูล
+                </button>
+                <button type="submit" class="w-full sm:w-auto px-8 py-3 rounded-xl font-medium text-white bg-brand-500 hover:bg-brand-600 focus:outline-none focus:ring-4 focus:ring-brand-500/30 flex items-center justify-center gap-2 transition-all shadow-lg shadow-brand-500/30 hover:-translate-y-0.5">
+                    <span class="material-symbols-rounded text-xl">how_to_reg</span>
+                    ลงทะเบียน / บันทึกที่อยู่
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+</body>
+</html>
